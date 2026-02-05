@@ -259,13 +259,13 @@ struct MultiBatteryView: View {
 }
 
 struct BlurView: NSViewRepresentable {
-    
+
     private let material: NSVisualEffectView.Material
-    
+
     init(material: NSVisualEffectView.Material) {
         self.material = material
     }
-    
+
     func makeNSView(context: Context) -> some NSVisualEffectView {
         let view = NSVisualEffectView()
         view.material = material
@@ -273,9 +273,174 @@ struct BlurView: NSViewRepresentable {
         view.state = .active
         return view
     }
-    
+
     func updateNSView(_ nsView: NSViewType, context: Context) {
         nsView.material = material
+    }
+}
+
+// MARK: - Power Flow Shape (tapered bar)
+struct PowerFlowShape: Shape {
+    var widthRatio: CGFloat // 0.0 to 1.0, how much of the width to fill
+
+    var animatableData: CGFloat {
+        get { widthRatio }
+        set { widthRatio = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let startHeight: CGFloat = rect.height * 0.9
+        let endHeight: CGFloat = rect.height * 0.6
+        let flowWidth = rect.width * min(widthRatio, 1.0)
+        let cornerRadius: CGFloat = 4
+
+        if flowWidth < cornerRadius * 2 {
+            return path
+        }
+
+        let startY = (rect.height - startHeight) / 2
+        let endY = (rect.height - endHeight) / 2
+
+        // Start from left with rounded corner
+        path.move(to: CGPoint(x: cornerRadius, y: startY))
+
+        // Top edge (tapers inward)
+        path.addLine(to: CGPoint(x: flowWidth - cornerRadius, y: endY))
+        path.addQuadCurve(
+            to: CGPoint(x: flowWidth, y: endY + cornerRadius),
+            control: CGPoint(x: flowWidth, y: endY)
+        )
+
+        // Right edge
+        path.addLine(to: CGPoint(x: flowWidth, y: rect.height - endY - cornerRadius))
+        path.addQuadCurve(
+            to: CGPoint(x: flowWidth - cornerRadius, y: rect.height - endY),
+            control: CGPoint(x: flowWidth, y: rect.height - endY)
+        )
+
+        // Bottom edge (tapers outward going back)
+        path.addLine(to: CGPoint(x: cornerRadius, y: rect.height - startY))
+        path.addQuadCurve(
+            to: CGPoint(x: 0, y: rect.height - startY - cornerRadius),
+            control: CGPoint(x: 0, y: rect.height - startY)
+        )
+
+        // Left edge
+        path.addLine(to: CGPoint(x: 0, y: startY + cornerRadius))
+        path.addQuadCurve(
+            to: CGPoint(x: cornerRadius, y: startY),
+            control: CGPoint(x: 0, y: startY)
+        )
+
+        path.closeSubpath()
+        return path
+    }
+}
+
+// MARK: - Power Flow Bar View
+struct PowerFlowBar: View {
+    let power: Double
+    let maxPower: Double
+    let icon: String
+    let barHeight: CGFloat
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // Flow bar with background
+            ZStack(alignment: .leading) {
+                // Background track
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(Color.primary.opacity(0.08))
+                    .frame(height: barHeight)
+
+                // Power flow shape
+                PowerFlowShape(widthRatio: maxPower > 0 ? CGFloat(power / maxPower) : 0)
+                    .fill(Color.primary.opacity(0.18))
+                    .frame(height: barHeight)
+
+                // Power value label
+                Text(String(format: "%.2f W", power))
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.primary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+
+            // Destination icon
+            ZStack {
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(Color.primary.opacity(0.08))
+                    .frame(width: 32, height: barHeight)
+                Image(systemName: icon)
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.leading, 6)
+        }
+    }
+}
+
+// MARK: - Power Allocation Graph (Al Dente-style)
+struct PowerGraphView: View {
+    @State private var batteryData: InternalBattery?
+    @State private var animatedSystemPower: Double = 0
+    @State private var animatedChargingPower: Double = 0
+    @State private var totalInputPower: Double = 0
+
+    private let barHeight: CGFloat = 36
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 8) {
+            // Left side: Power input indicator
+            VStack(spacing: 2) {
+                Image(systemName: "bolt.fill")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.yellow)
+                Text(String(format: "%.0fW", totalInputPower))
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(.primary)
+            }
+            .frame(width: 44)
+
+            // Right side: Power flow bars
+            VStack(spacing: 6) {
+                // Charging power flow
+                PowerFlowBar(
+                    power: animatedChargingPower,
+                    maxPower: totalInputPower,
+                    icon: "battery.100.bolt",
+                    barHeight: barHeight
+                )
+
+                // System power flow
+                PowerFlowBar(
+                    power: animatedSystemPower,
+                    maxPower: totalInputPower,
+                    icon: "laptopcomputer",
+                    barHeight: barHeight
+                )
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 10)
+        .onAppear {
+            refreshPowerData()
+        }
+        .onReceive(mainTimer) { _ in
+            refreshPowerData()
+        }
+    }
+
+    private func refreshPowerData() {
+        let finder = InternalFinder()
+        if let battery = finder.getInternalBattery() {
+            batteryData = battery
+            withAnimation(.easeInOut(duration: 0.3)) {
+                animatedSystemPower = max(battery.systemPower ?? 0, 0)
+                animatedChargingPower = max(battery.chargingPower ?? 0, 0)
+                totalInputPower = animatedSystemPower + animatedChargingPower
+            }
+        }
     }
 }
 
@@ -409,6 +574,28 @@ struct popover: View {
                 .offset(y: -3.5)
                 .padding(.horizontal, 5)
                 .onHover{ hovering in (overStack, overStack2) = (-1, -1) }
+
+                // Power allocation graph (shown when Mac is plugged in)
+                if InternalBattery.status.hasBattery && InternalBattery.status.acPowered {
+                    PowerGraphView()
+                        .padding(.horizontal, 6)
+                        .padding(.top, 4)
+                        .padding(.bottom, 2)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                .strokeBorder(Color.secondary, lineWidth: 1)
+                                .padding(.horizontal, 5)
+                                .opacity(0.23)
+                        )
+                        .onHover { hovering in
+                            if hovering {
+                                overStack = -1
+                                overStack2 = -1
+                                overStackNC = -1
+                            }
+                        }
+                }
+
                 VStack(alignment:.leading,spacing: 0) {
                     if allDevices.count < 1 && hiddenDevices.count < 1{
                         HStack{

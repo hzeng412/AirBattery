@@ -20,7 +20,7 @@ struct iBattery {
 
 class InternalBattery {
     static var status: iBattery = getPowerState()
-    
+
     var name: String?
     var timeToFull: Int?
     var timeToEmpty: Int?
@@ -38,6 +38,13 @@ class InternalBattery {
     var voltage: Double?
     var watts: Double?
     var temperature: Double?
+
+    // Power allocation data (for Al Dente-style power graph)
+    var adapterWatts: Int?          // Adapter max wattage
+    var adapterVoltage: Double?     // Adapter voltage in V
+    var adapterAmperage: Int?       // Adapter current in mA
+    var systemPower: Double?        // Power used by system (W)
+    var chargingPower: Double?      // Power going to battery (W)
 
     var charge: Double? {
         get {
@@ -182,7 +189,37 @@ class InternalFinder {
             battery.watts = Double(watts)
         }
 
+        // Read adapter details for power allocation graph
+        if let adapterDetails = self.getAdapterDetails() {
+            battery.adapterWatts = adapterDetails.watts
+            battery.adapterVoltage = adapterDetails.voltage
+            battery.adapterAmperage = adapterDetails.amperage
+
+            // Calculate charging power (power going into battery)
+            if let amperage = battery.amperage, let voltage = battery.voltage, battery.isCharging == true {
+                battery.chargingPower = (Double(amperage) * voltage) / 1000.0
+            } else {
+                battery.chargingPower = 0
+            }
+
+            // Calculate system power = input power - charging power
+            let inputPower = (adapterDetails.voltage * Double(adapterDetails.amperage)) / 1000.0
+            battery.systemPower = inputPower - (battery.chargingPower ?? 0)
+        }
+
         return battery
+    }
+
+    fileprivate func getAdapterDetails() -> (watts: Int, voltage: Double, amperage: Int)? {
+        if let value = IORegistryEntryCreateCFProperty(self.serviceInternal, "AdapterDetails" as CFString, kCFAllocatorDefault, 0) {
+            if let dict = value.takeRetainedValue() as? [String: Any] {
+                let watts = dict["Watts"] as? Int ?? 0
+                let voltage = (dict["AdapterVoltage"] as? Double ?? 0) / 1000.0
+                let amperage = dict["Current"] as? Int ?? 0
+                return (watts, voltage, amperage)
+            }
+        }
+        return nil
     }
 
     fileprivate func getIntValue(_ identifier: CFString) -> Int? {

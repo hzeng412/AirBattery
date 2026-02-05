@@ -155,3 +155,7 @@
 "Uninstall" = "卸载";
 "Install" = "安装";
 "After installation, you can run \"airbattery\" in yor terminal to list all devices." = "安装此工具后, 在命令行中执行\"airbattery\"即可列出所有设备.";
+
+"Power" = "功率";
+"System" = "系统";
+"Charging" = "充电";

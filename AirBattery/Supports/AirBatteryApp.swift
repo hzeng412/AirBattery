@@ -10,6 +10,7 @@ import WidgetKit
 import UserNotifications
 import IOBluetooth
 import Sparkle
+import ServiceManagement
 
 let fd = FileManager.default
 let ud = UserDefaults.standard
@@ -121,7 +122,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
                     ncDeviceCount += count
                 }
             }
-            let menuHeight = CGFloat((max(max(allDevices.count,1)+ncDeviceCount,1)+hiddenRow)*37+30+ncCount)
+            let powerGraphHeight: CGFloat = (ibStatus.hasBattery && ibStatus.acPowered) ? 110 : 0
+            let baseDeviceCount = max(allDevices.count, 1)
+            let totalDeviceCount = max(baseDeviceCount + ncDeviceCount, 1)
+            let menuHeight = CGFloat((totalDeviceCount + hiddenRow) * 37 + 30 + ncCount) + powerGraphHeight
             let mouse = NSEvent.mouseLocation
             var menuX = mouse.x
             var menuY = mouse.y
@@ -373,7 +377,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
                 ncDeviceCount += count
             }
         }
-        contentView.frame = NSRect(x: 0, y: 0, width: 352, height: (max(max(allDevices.count,1)+ncDeviceCount,1)+hiddenRow)*37+20+ncCount)
+        let baseDeviceCount = max(allDevices.count, 1)
+        let totalDeviceCount = max(baseDeviceCount + ncDeviceCount, 1)
+        contentView.frame = NSRect(x: 0, y: 0, width: 352, height: (totalDeviceCount + hiddenRow) * 37 + 20 + ncCount)
         let menuItem = NSMenuItem()
         menuItem.view = contentView
         statusMenu.removeAllItems()
