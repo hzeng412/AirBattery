@@ -60,6 +60,9 @@
 		18EF7E632C141CB70065A9E1 /* BatteryWidget3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EF7E622C1414A50065A9E1 /* BatteryWidget3.swift */; };
 		18F615F32B763DD800873AA4 /* BLEBattery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F615F22B763DD800873AA4 /* BLEBattery.swift */; };
 		18F615F92B76439300873AA4 /* AirBatteryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F615F82B76439300873AA4 /* AirBatteryModel.swift */; };
+		AB000001E9B901B2 /* SMCController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000002E9B901B2 /* SMCController.swift */; };
+		AB000003E9B901B2 /* ChargeLimitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000004E9B901B2 /* ChargeLimitManager.swift */; };
+		AB000005E9B901B2 /* ChargeLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000006E9B901B2 /* ChargeLimitView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -168,6 +171,9 @@
 		18EF7E622C1414A50065A9E1 /* BatteryWidget3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryWidget3.swift; sourceTree = "<group>"; };
 		18F615F22B763DD800873AA4 /* BLEBattery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBattery.swift; sourceTree = "<group>"; };
 		18F615F82B76439300873AA4 /* AirBatteryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirBatteryModel.swift; sourceTree = "<group>"; };
+		AB000002E9B901B2 /* SMCController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMCController.swift; sourceTree = "<group>"; };
+		AB000004E9B901B2 /* ChargeLimitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeLimitManager.swift; sourceTree = "<group>"; };
+		AB000006E9B901B2 /* ChargeLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeLimitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -331,6 +337,8 @@
 				185E382C2C2733B9005578EC /* BTDBattery.swift */,
 				18F615F22B763DD800873AA4 /* BLEBattery.swift */,
 				18F615F82B76439300873AA4 /* AirBatteryModel.swift */,
+				AB000002E9B901B2 /* SMCController.swift */,
+				AB000004E9B901B2 /* ChargeLimitManager.swift */,
 			);
 			path = BatteryInfo;
 			sourceTree = "<group>";
@@ -342,6 +350,7 @@
 				18347DCD2B88417500A78DF6 /* BatteryView.swift */,
 				1819E94B2CC2A8C2007B95E9 /* BatteryAlertView.swift */,
 				1841D4802AAA28880022A1BE /* SettingsView.swift */,
+				AB000006E9B901B2 /* ChargeLimitView.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -553,6 +562,9 @@
 				18347DCE2B88417500A78DF6 /* BatteryView.swift in Sources */,
 				18347DCA2B882C6500A78DF6 /* MagicBattery.swift in Sources */,
 				1841D47D2AAA20F80022A1BE /* InternalBattery.swift in Sources */,
+				AB000001E9B901B2 /* SMCController.swift in Sources */,
+				AB000003E9B901B2 /* ChargeLimitManager.swift in Sources */,
+				AB000005E9B901B2 /* ChargeLimitView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

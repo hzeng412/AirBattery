@@ -160,7 +160,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
             }
             contentView.frame = NSRect(x: menuX, y: menuY, width: 352, height: menuHeight)
             dockWindow = AutoHideWindow(contentRect: contentView.frame, styleMask: [.fullSizeContentView], backing: .buffered, defer: false)
-            dockWindow.title = "AirBattery Dock Window"
+            dockWindow.title = "AirBattery Swoosh Dock Window"
             dockWindow.level = .popUpMenu
             dockWindow.contentView = contentView
             dockWindow.isOpaque = false
@@ -201,7 +201,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         if showOn == "dock" || showOn == "both" { NSApp.setActivationPolicy(.regular) }
         isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds, .withTimeZone]
         menu.addItem(withTitle:"Settings...".local, action: #selector(openSetting), keyEquivalent: "")
-        menu.addItem(withTitle:"About AirBattery".local, action: #selector(openAbout), keyEquivalent: "")
+        menu.addItem(withTitle:"About AirBattery Swoosh".local, action: #selector(openAbout), keyEquivalent: "")
         
         //处理旧版偏好设置
         if let alertList = (ud.object(forKey: "alertList") ?? []) as? [String] {
@@ -281,13 +281,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let opts: ProcessInfo.ActivityOptions = [.automaticTerminationDisabled, .suddenTerminationDisabled]
-        keepAliveActivity = ProcessInfo.processInfo.beginActivity(options: opts, reason: "AirBattery menu bar monitoring")
+        keepAliveActivity = ProcessInfo.processInfo.beginActivity(options: opts, reason: "AirBattery Swoosh menu bar monitoring")
 
         if showOn == "dock" || showOn == "both" {
             let tipID = "ab.docktile-power.note"
             let never = ud.object(forKey: "neverRemindMe") as! [String]
             if !never.contains(tipID) {
-                let alert = createAlert(title: "AirBattery Tips".local, message: "Displaying AirBattery on the Dock will consume more power, it is better to use Menu Bar mode or Widgets.".local, button1: "Don't remind me again", button2: "OK")
+                let alert = createAlert(title: "AirBattery Swoosh Tips".local, message: "Displaying AirBattery Swoosh on the Dock will consume more power, it is better to use Menu Bar mode or Widgets.".local, button1: "Don't remind me again", button2: "OK")
                 if alert.runModal() == .alertFirstButtonReturn { ud.setValue(never + [tipID], forKey: "neverRemindMe") }
             }
         }
@@ -296,7 +296,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
             let tipID = "ab.third-party-device.note"
             let never = ud.object(forKey: "neverRemindMe") as! [String]
             if !never.contains(tipID) {
-                let alert = createAlert(title: "AirBattery Tips".local, message: "If some of your devices shows battery level in the Bluetooth menu, but AirBattery doesn't find it. Try disconnecting and reconnecting it, and wait a few minutes.".local, button1: "Don't remind me again", button2: "OK")
+                let alert = createAlert(title: "AirBattery Swoosh Tips".local, message: "If some of your devices shows battery level in the Bluetooth menu, but AirBattery Swoosh doesn't find it. Try disconnecting and reconnecting it, and wait a few minutes.".local, button1: "Don't remind me again", button2: "OK")
                 if alert.runModal() == .alertFirstButtonReturn { ud.setValue(never + [tipID], forKey: "neverRemindMe") }
             }
             // Bootstrap Enhanced HID scan incrementally with a short initial window

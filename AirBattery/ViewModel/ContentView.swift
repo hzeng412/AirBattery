@@ -386,16 +386,17 @@ struct PowerGraphView: View {
     @State private var animatedSystemPower: Double = 0
     @State private var animatedChargingPower: Double = 0
     @State private var totalInputPower: Double = 0
+    @State private var isPluggedIn: Bool = true
 
     private let barHeight: CGFloat = 36
 
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
-            // Left side: Power input indicator
+            // Left side: Power source indicator
             VStack(spacing: 2) {
-                Image(systemName: "bolt.fill")
+                Image(systemName: isPluggedIn ? "bolt.fill" : "battery.100")
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.yellow)
+                    .foregroundColor(isPluggedIn ? .yellow : .green)
                 Text(String(format: "%.0fW", totalInputPower))
                     .font(.system(size: 11, weight: .semibold))
                     .foregroundColor(.primary)
@@ -404,13 +405,15 @@ struct PowerGraphView: View {
 
             // Right side: Power flow bars
             VStack(spacing: 6) {
-                // Charging power flow
-                PowerFlowBar(
-                    power: animatedChargingPower,
-                    maxPower: totalInputPower,
-                    icon: "battery.100.bolt",
-                    barHeight: barHeight
-                )
+                if isPluggedIn {
+                    // Charging power flow
+                    PowerFlowBar(
+                        power: animatedChargingPower,
+                        maxPower: totalInputPower,
+                        icon: "battery.100.bolt",
+                        barHeight: barHeight
+                    )
+                }
 
                 // System power flow
                 PowerFlowBar(
@@ -435,10 +438,20 @@ struct PowerGraphView: View {
         let finder = InternalFinder()
         if let battery = finder.getInternalBattery() {
             batteryData = battery
+            let pluggedIn = battery.acPowered ?? false
             withAnimation(.easeInOut(duration: 0.3)) {
-                animatedSystemPower = max(battery.systemPower ?? 0, 0)
-                animatedChargingPower = max(battery.chargingPower ?? 0, 0)
-                totalInputPower = animatedSystemPower + animatedChargingPower
+                isPluggedIn = pluggedIn
+                if pluggedIn {
+                    animatedSystemPower = max(battery.systemPower ?? 0, 0)
+                    animatedChargingPower = max(battery.chargingPower ?? 0, 0)
+                    totalInputPower = animatedSystemPower + animatedChargingPower
+                } else {
+                    // On battery: watts is negative (discharge), use absolute value
+                    let dischargePower = abs(battery.watts ?? 0)
+                    animatedSystemPower = dischargePower
+                    animatedChargingPower = 0
+                    totalInputPower = dischargePower
+                }
             }
         }
     }
@@ -575,12 +588,29 @@ struct popover: View {
                 .padding(.horizontal, 5)
                 .onHover{ hovering in (overStack, overStack2) = (-1, -1) }
 
-                // Power allocation graph (shown when Mac is plugged in)
-                if InternalBattery.status.hasBattery && InternalBattery.status.acPowered {
+                // Power allocation graph and charge limit
+                if InternalBattery.status.hasBattery {
                     PowerGraphView()
                         .padding(.horizontal, 6)
                         .padding(.top, 4)
                         .padding(.bottom, 2)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                .strokeBorder(Color.secondary, lineWidth: 1)
+                                .padding(.horizontal, 5)
+                                .opacity(0.23)
+                        )
+                        .onHover { hovering in
+                            if hovering {
+                                overStack = -1
+                                overStack2 = -1
+                                overStackNC = -1
+                            }
+                        }
+                    
+                    // Charge limit control (Al Dente-like feature)
+                    ChargeLimitView()
+                        .padding(.horizontal, 6)
                         .background(
                             RoundedRectangle(cornerRadius: 4, style: .continuous)
                                 .strokeBorder(Color.secondary, lineWidth: 1)

@@ -13,6 +13,10 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleDisplayName</key>
+	<string>AirBattery Swoosh</string>
+	<key>CFBundleName</key>
+	<string>AirBattery Swoosh</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
 	<key>NSDisableAutomaticTermination</key>

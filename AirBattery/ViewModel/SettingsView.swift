@@ -44,7 +44,7 @@ struct SettingsView: View {
             .padding(.top, 9)
         }
         .frame(width: 600, height: 440)
-        .navigationTitle("AirBattery Settings")
+        .navigationTitle("AirBattery Swoosh Settings")
     }
 }
 
@@ -63,7 +63,7 @@ struct GeneralView: View {
                         SMLoginItemSetEnabled("com.lihaoyun6.AirBatteryHelper" as CFString, newValue)
                     }
                 Divider().opacity(0.5)
-                SPicker("Show AirBattery", selection: $showOn) {
+                SPicker("Show AirBattery Swoosh", selection: $showOn) {
                     Text("Dock").tag("dock")
                     Text("Menu Bar").tag("sbar")
                     Text("Both").tag("both")
@@ -88,7 +88,7 @@ struct GeneralView: View {
                         NSApp.setActivationPolicy(.accessory)
                     }
                     if newValue == "dock" || newValue == "both" {
-                        _ = createAlert(title: "AirBattery Tips".local, message: "Displaying AirBattery on the Dock will consume more power, it is better to use Menu Bar mode or Widgets.".local, button1: "OK").runModal()
+                        _ = createAlert(title: "AirBattery Swoosh Tips".local, message: "Displaying AirBattery Swoosh on the Dock will consume more power, it is better to use Menu Bar mode or Widgets.".local, button1: "OK").runModal()
                     }
                 }
             }
@@ -106,7 +106,7 @@ struct GeneralView: View {
             VStack(spacing: 8) {
                 CheckForUpdatesView(updater: updaterController.updater)
                 if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-                    Text("AirBattery v\(appVersion)")
+                    Text("AirBattery Swoosh v\(appVersion)")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .onTapGesture {
@@ -148,11 +148,11 @@ struct NearbilityView: View {
                 Divider().opacity(0.5)
                 SToggle("Discover more BT devices", isOn: $readBTHID, tips: "Get the battery usage of more third-party Bluetooth devices\n\nBattery data will be updated when devices are reconnected to the Mac or the Mac wakes up.")
                 Divider().opacity(0.5)
-                SToggle("Discover more BLE devices", isOn: $readBLEDevice, tips: "Try to get the battery usage of any Bluetooth device that AirBattery can find\n\nWARNING: This is a BETA feature and may cause unexpected errors!")
+                SToggle("Discover more BLE devices", isOn: $readBLEDevice, tips: "Try to get the battery usage of any Bluetooth device that AirBattery Swoosh can find\n\nWARNING: This is a BETA feature and may cause unexpected errors!")
                     .foregroundColor(.orange)
                     .onChange(of: readBLEDevice) { newValue in
                         if newValue {
-                            _ = createAlert(title: "AirBattery Tips".local, message: "If you see a bluetooth pairing request from any device that isn't yours, add it to your blocklist!".local, button1: "OK").runModal()
+                            _ = createAlert(title: "AirBattery Swoosh Tips".local, message: "If you see a bluetooth pairing request from any device that isn't yours, add it to your blocklist!".local, button1: "OK").runModal()
                         }
                     }
                 Divider().opacity(0.5)
@@ -164,7 +164,7 @@ struct NearbilityView: View {
                     SSteper("Refresh Interval (min)", value: $updateInterval, min: 1, max: 99)
                     if updateDelay != updateInterval {
                         HStack {
-                            Text("Relaunch AirBattery to apply this change")
+                            Text("Relaunch AirBattery Swoosh to apply this change")
                                 .font(.footnote)
                                 .foregroundColor(.red)
                             Spacer()
@@ -172,7 +172,7 @@ struct NearbilityView: View {
                     }
                 }
                 Divider().opacity(0.5)
-                SSteper("Earbud Merging Threshold", value: $twsMerge, min: 1, max: 99, tips: "If the difference in battery usage between the left and right earbuds is less than this value, AirBattery will show them as one device.")
+                SSteper("Earbud Merging Threshold", value: $twsMerge, min: 1, max: 99, tips: "If the difference in battery usage between the left and right earbuds is less than this value, AirBattery Swoosh will show them as one device.")
             }
         }
     }
