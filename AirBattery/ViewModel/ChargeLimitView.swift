@@ -26,10 +26,17 @@ struct ChargeLimitView: View {
 
                 Spacer()
 
+                if manager.isWriting {
+                    ProgressView()
+                        .controlSize(.small)
+                        .frame(width: 16, height: 16)
+                }
+
                 Toggle("", isOn: $manager.isEnabled)
                     .toggleStyle(SwitchToggleStyle(tint: .green))
                     .labelsHidden()
                     .scaleEffect(0.8)
+                    .disabled(manager.isWriting)
             }
 
             // Always show slider
@@ -54,10 +61,15 @@ struct ChargeLimitView: View {
                         }
                     )
                     .accentColor(.green)
-                    .disabled(!manager.isEnabled)
+                    .disabled(!manager.isEnabled || manager.isWriting)
                     .opacity(manager.isEnabled ? 1.0 : 0.5)
                     .onAppear {
                         sliderValue = Double(manager.chargeLimit)
+                    }
+                    .onChange(of: manager.chargeLimit) { newValue in
+                        if !isEditing {
+                            sliderValue = Double(newValue)
+                        }
                     }
                     .onChange(of: sliderValue) { newValue in
                         if manager.isAppleSilicon {

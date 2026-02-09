@@ -63,6 +63,7 @@
 		AB000001E9B901B2 /* SMCController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000002E9B901B2 /* SMCController.swift */; };
 		AB000003E9B901B2 /* ChargeLimitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000004E9B901B2 /* ChargeLimitManager.swift */; };
 		AB000005E9B901B2 /* ChargeLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000006E9B901B2 /* ChargeLimitView.swift */; };
+		CC000001SMCWRITE0 /* smc-write in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC000002SMCWRITE0 /* smc-write */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 18892A852B81F8320017377E;
 			remoteInfo = widgetExtension;
+		};
+		CC000003SMCWRITE0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1841D4432AA6071C0022A1BE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CC000004SMCWRITE0;
+			remoteInfo = "smc-write";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -104,6 +112,25 @@
 				184ADF0E2DDB83EC004791F0 /* abt in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC000005SMCWRITE0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				CC000001SMCWRITE0 /* smc-write in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC000006SMCWRITE0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 		18892A9A2B81F8330017377E /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -174,10 +201,12 @@
 		AB000002E9B901B2 /* SMCController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMCController.swift; sourceTree = "<group>"; };
 		AB000004E9B901B2 /* ChargeLimitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeLimitManager.swift; sourceTree = "<group>"; };
 		AB000006E9B901B2 /* ChargeLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeLimitView.swift; sourceTree = "<group>"; };
+		CC000002SMCWRITE0 /* smc-write */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "smc-write"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		184ADED22DDB2B37004791F0 /* abt */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = abt; sourceTree = "<group>"; };
+		CC000007SMCWRITE0 /* smc-write */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "smc-write"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +231,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				184ADEDA2DDB2C8A004791F0 /* ArgumentParser in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC000008SMCWRITE0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +282,7 @@
 				18892A8C2B81F8320017377E /* widget */,
 				18283DA22B854776009B1B13 /* AirBatteryHelper */,
 				184ADED22DDB2B37004791F0 /* abt */,
+				CC000007SMCWRITE0 /* smc-write */,
 				18892A872B81F8320017377E /* Frameworks */,
 				1841D44C2AA6071C0022A1BE /* Products */,
 			);
@@ -258,6 +295,7 @@
 				18892A862B81F8320017377E /* AirBatteryWidgetExtension.appex */,
 				18283DA12B854776009B1B13 /* AirBatteryHelper.app */,
 				184ADED12DDB2B37004791F0 /* abt */,
+				CC000002SMCWRITE0 /* smc-write */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -385,11 +423,13 @@
 				18892A9A2B81F8330017377E /* Embed Foundation Extensions */,
 				18283DB02B8549B2009B1B13 /* CopyFiles */,
 				184ADEDC2DDB390D004791F0 /* CopyFiles */,
+				CC000005SMCWRITE0 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				18892A982B81F8330017377E /* PBXTargetDependency */,
+				CC00000ASMCWRITE0 /* PBXTargetDependency */,
 			);
 			name = AirBattery;
 			packageProductDependencies = (
@@ -421,6 +461,26 @@
 			);
 			productName = atb;
 			productReference = 184ADED12DDB2B37004791F0 /* abt */;
+			productType = "com.apple.product-type.tool";
+		};
+		CC000004SMCWRITE0 /* smc-write */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC00000BSMCWRITE0 /* Build configuration list for PBXNativeTarget "smc-write" */;
+			buildPhases = (
+				CC000009SMCWRITE0 /* Sources */,
+				CC000008SMCWRITE0 /* Frameworks */,
+				CC000006SMCWRITE0 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CC000007SMCWRITE0 /* smc-write */,
+			);
+			name = "smc-write";
+			productName = "smc-write";
+			productReference = CC000002SMCWRITE0 /* smc-write */;
 			productType = "com.apple.product-type.tool";
 		};
 		18892A852B81F8320017377E /* AirBatteryWidgetExtension */ = {
@@ -459,6 +519,9 @@
 					184ADED02DDB2B37004791F0 = {
 						CreatedOnToolsVersion = 16.2;
 					};
+					CC000004SMCWRITE0 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					18892A852B81F8320017377E = {
 						CreatedOnToolsVersion = 15.1;
 					};
@@ -488,6 +551,7 @@
 				18892A852B81F8320017377E /* AirBatteryWidgetExtension */,
 				18283DA02B854776009B1B13 /* AirBatteryHelper */,
 				184ADED02DDB2B37004791F0 /* abt */,
+				CC000004SMCWRITE0 /* smc-write */,
 			);
 		};
 /* End PBXProject section */
@@ -578,6 +642,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CC000009SMCWRITE0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18892A822B81F8320017377E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -600,6 +671,11 @@
 			isa = PBXTargetDependency;
 			target = 18892A852B81F8320017377E /* AirBatteryWidgetExtension */;
 			targetProxy = 18892A972B81F8330017377E /* PBXContainerItemProxy */;
+		};
+		CC00000ASMCWRITE0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CC000004SMCWRITE0 /* smc-write */;
+			targetProxy = CC000003SMCWRITE0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -921,6 +997,37 @@
 			};
 			name = Release;
 		};
+		CC00000CSMCWRITE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 37SCFKRLNW;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CC00000DSMCWRITE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 37SCFKRLNW;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		18892A9B2B81F8330017377E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1023,6 +1130,15 @@
 			buildConfigurations = (
 				184ADED62DDB2B37004791F0 /* Debug */,
 				184ADED72DDB2B37004791F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CC00000BSMCWRITE0 /* Build configuration list for PBXNativeTarget "smc-write" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC00000CSMCWRITE0 /* Debug */,
+				CC00000DSMCWRITE0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
