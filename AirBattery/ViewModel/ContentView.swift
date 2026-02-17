@@ -608,22 +608,6 @@ struct popover: View {
                             }
                         }
                     
-                    // Charge limit control (Al Dente-like feature)
-                    ChargeLimitView()
-                        .padding(.horizontal, 6)
-                        .background(
-                            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                                .strokeBorder(Color.secondary, lineWidth: 1)
-                                .padding(.horizontal, 5)
-                                .opacity(0.23)
-                        )
-                        .onHover { hovering in
-                            if hovering {
-                                overStack = -1
-                                overStack2 = -1
-                                overStackNC = -1
-                            }
-                        }
                 }
 
                 VStack(alignment:.leading,spacing: 0) {
